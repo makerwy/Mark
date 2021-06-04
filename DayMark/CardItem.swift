@@ -17,6 +17,12 @@ struct CardItem: View {
     @Binding var selection: [Int]
     
     
+    var dateFormatter: DateFormatter {
+       let dateFormatter = DateFormatter()
+       dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+       return dateFormatter
+    }
+    
     var body: some View {
         HStack {
             Rectangle()
@@ -26,6 +32,7 @@ struct CardItem: View {
             if editMode {
                 Button(action: {
                     cardVM.delete(id: index)
+                    selection.removeAll()
                 }, label: {
                     Image(systemName: "trash")
                         .imageScale(.large)
@@ -45,7 +52,7 @@ struct CardItem: View {
                             .font(.headline)
                             .foregroundColor(.black)
                             .fontWeight(.heavy)
-                        Text(cardVM.cardList[index].date.description)
+                        Text(cardVM.cardList[index].date, formatter: dateFormatter)
                             .font(.subheadline)
                             .foregroundColor(.gray)
                     }
@@ -60,12 +67,33 @@ struct CardItem: View {
                     .environmentObject(cardVM)
             })
             
+//            if !editMode {
+//                Image(systemName: cardVM.cardList[index].isChecked ? "checkmark.square.fill" : "square")
+//                    .imageScale(.large)
+//                    .padding(.trailing)
+//                    .onTapGesture {
+//                        cardVM.check(id: index)
+//                    }
+//            }else {
+//                Image(systemName: selection.firstIndex(where: {$0 == index}) != nil ? "checkmark.circle.fill" : "circle")
+//                    .imageScale(.large)
+//                    .padding(.trailing)
+//                    .onTapGesture {
+//                        if selection.firstIndex(where: {$0 == index}) == nil {
+//                            selection.append(index)
+//                        }else {
+//                            selection.remove(at: selection.firstIndex(where: {$0 == index})!)
+//                        }
+//                    }
+//            }
+            
             if !editMode {
-                Image(systemName: cardVM.cardList[index].isChecked ? "checkmark.square.fill" : "square")
+                Image(systemName: cardVM.cardList[index].isFavorited ? "star.fill" : "star" )
                     .imageScale(.large)
+                    .foregroundColor(.yellow)
                     .padding(.trailing)
                     .onTapGesture {
-                        cardVM.check(id: index)
+                        cardVM.favarite(id: index)
                     }
             }else {
                 Image(systemName: selection.firstIndex(where: {$0 == index}) != nil ? "checkmark.circle.fill" : "circle")

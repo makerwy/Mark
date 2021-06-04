@@ -14,6 +14,7 @@ struct ContentView: View {
     @State var editMode: Bool = false
     @State var selection: [Int] = []
  
+    
     var body: some View {
         NavigationView {
             ZStack(alignment: .bottomTrailing) {
